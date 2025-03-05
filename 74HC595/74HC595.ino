@@ -32,14 +32,14 @@ void setup() {
 	pinMode(dataPin, OUTPUT);
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
+	Serial.begin(9600);
 }
 
-void loop() {
-	display4(109);
-	/* for(int i=0;i<9999;i++) { */
-	/* 	display4(i); */
-	/* 	delay(100); */
-	/* } */
+void loop() {	
+	for(int i=0;i<9999;i++) {
+		display4(i);
+		delay(100);
+	}
 }
 
 void display1(int dPin, int num) {
@@ -89,13 +89,19 @@ int display4(int num) {
 	}
 
 	int divisor = 1000;
-	int q, r = 0;
+	int q, r, prev_q = 0;
 	for (int i = 0; i < 4; i++) {
 		q = num / divisor;
 		r = num % divisor;
-		display1(dPins[i], q);
-		delay(5);
+		
+		if (i==3 || q!=0 || prev_q !=0) {
+			display1(dPins[i], q);
+			delay(5);
+		} 
+
+			 		
 		divisor /= 10;
 		num = r;
+		prev_q = q;	
 	}
 }
